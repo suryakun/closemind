@@ -8,6 +8,7 @@ RUN go mod download
 RUN go build -o main -ldflags=-X=main.version=${VERSION} .
 
 FROM debian:buster-slim
+EXPOSE 8080
 COPY --from=builder /go/src/app/main /go/bin/main
 ENV PATH="/go/bin:${PATH}"
 CMD ["main"]
