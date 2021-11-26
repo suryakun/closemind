@@ -43,9 +43,6 @@ jobs:
         go vet .
         golint .
     
-    # Run testing on the code
-    - name: Run testing
-      run: cd test && go test -v
     
   # The "deploy" workflow
   deploy:
