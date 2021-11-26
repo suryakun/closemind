@@ -57,7 +57,7 @@ jobs:
     - name: Deploy to Docker registry
       uses: docker/build-push-action@v1
       with:
-        username: ${{ secrets.DOCKER_USERNAME }}
-        password: ${{ secrets.DOCKER_PASSWORD }}
+        username: ${{ secrets.DOCKERHUB_USERNAME }}
+        password: ${{ secrets.DOCKERHUB_PASSWORD }}
         repository: surya1212/closemind
         tag_with_ref: true
