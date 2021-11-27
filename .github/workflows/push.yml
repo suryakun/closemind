@@ -39,6 +39,12 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v2
 
+      - name: Docker meta
+        uses: docker/metadata-action@v3
+        id: meta
+        with:
+          images: surya1212/closemind
+
       - name: Set up QEMU
         uses: docker/setup-qemu-action@v1
 
