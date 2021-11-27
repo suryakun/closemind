@@ -1,5 +1,8 @@
 name: golang-pipeline
-on: push
+on: 
+  push:
+    tags: 
+      - '*'
 jobs:
   test:
     runs-on: ubuntu-latest
@@ -25,8 +28,6 @@ jobs:
         run: |
           echo ${{steps.version_step.outputs.version_tag}}
           echo ${{steps.version_step.outputs.latest_tag}}
-      - name: Set up QEMU
-        uses: docker/setup-qemu-action@v1
 
       - name: PrepareReg Names
         id: read-docker-image-identifiers
@@ -35,13 +36,26 @@ jobs:
           echo LASTEST_TAG=$(echo ${{ steps.version_step.outputs.latest_tag  }} | tr '[:upper:]' '[:lower:]') >> $GITHUB_ENV
 
       # Deploy to Docker registry
-      - name: Deploy to Docker registry
-        uses: docker/build-push-action@v1
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Set up QEMU
+        uses: docker/setup-qemu-action@v1
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v1
+
+      - name: Login to DockerHub
+        uses: docker/login-action@v1
         with:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_PASSWORD }}
-          repository: surya1212/closemind
-          tag_with_ref: true
+
+      - name: Build and push
+        uses: docker/build-push-action@v2
+        with:
+          context: .
+          push: true
           tags: |
             ${{env.VERSION_TAG}}
             ${{env.LASTEST_TAG}}
